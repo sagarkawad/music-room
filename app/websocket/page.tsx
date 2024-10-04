@@ -5,11 +5,11 @@ import YouTubeVideo from "@/components/YouTubeVideo";
 
 const WebSocketComponent: React.FC = () => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
-  const [timeValue, setTimeValue] = useState(0);
+  const [timeValue, setTimeValue] = useState("");
 
   useEffect(() => {
     // Establish WebSocket connection
-    const ws = new WebSocket("https://music-room-t1yl.onrender.com");
+    const ws = new WebSocket("http://localhost:8080");
 
     ws.onopen = () => {
       console.log("Connected to WebSocket");
@@ -38,7 +38,7 @@ const WebSocketComponent: React.FC = () => {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen">
-      <YouTubeVideo sendMessage={sendMessage} />
+      <YouTubeVideo sendMessage={sendMessage} timeValue={timeValue} />
       <h1 className="mt-4">{timeValue}</h1>
     </div>
   );

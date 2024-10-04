@@ -7,6 +7,7 @@ import { useRef } from "react";
 // Define the type for props, including sendMessage
 interface YouTubeVideoProps {
   sendMessage: (time: number) => void;
+  timeValue: string;
 }
 
 // Define the YouTube Player Interface
@@ -14,7 +15,10 @@ interface YouTubePlayer {
   seekTo(seconds: number, allowSeekAhead: boolean): void;
 }
 
-const YouTubeVideo: React.FC<YouTubeVideoProps> = ({ sendMessage }) => {
+const YouTubeVideo: React.FC<YouTubeVideoProps> = ({
+  sendMessage,
+  timeValue,
+}) => {
   const playerRef = useRef<YouTubePlayer | null>(null);
 
   const onPlayerReady = (event: YouTubeEvent) => {
@@ -27,8 +31,13 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({ sendMessage }) => {
   const onStateChange = (event: YouTubeEvent) => {
     console.log(event.target.playerInfo.currentTime);
     sendMessage(event.target.playerInfo.currentTime);
+    skipToTime(timeValue);
+  };
+
+  const skipToTime = (timeInSeconds: string) => {
     if (playerRef.current) {
-      playerRef.current.seekTo(event.target.playerInfo.currentTime, true); // true for seconds
+      playerRef.current.seekTo(parseInt(timeInSeconds), true); // true for seconds
+      console.log("tis", timeInSeconds);
     }
   };
 
@@ -45,7 +54,7 @@ const YouTubeVideo: React.FC<YouTubeVideoProps> = ({ sendMessage }) => {
       videoId="cF1Na4AIecM"
       opts={opts}
       onReady={onPlayerReady}
-      onStateChange={onStateChange}
+      // onPlaybackRateChange={onStateChange}
     />
   );
 };
