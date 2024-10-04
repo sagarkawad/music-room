@@ -9,7 +9,7 @@ const WebSocketComponent: React.FC = () => {
 
   useEffect(() => {
     // Establish WebSocket connection
-    const ws = new WebSocket("https://music-room-t1yl.onrender.com/");
+    const ws = new WebSocket("http://localhost:8080");
 
     ws.onopen = () => {
       console.log("Connected to WebSocket");

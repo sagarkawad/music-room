@@ -19,9 +19,12 @@ wss.on("connection", (ws) => {
   // Listen for messages from the client
   ws.on("message", (message) => {
     console.log("Received message:", message.toString());
-
-    // Respond back to the client
-    ws.send(`Server received: ${message}`);
+    // Broadcast the received message to all connected clients
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(`Broadcast message: ${message}`);
+      }
+    });
   });
 
   // Handle WebSocket connection close event
