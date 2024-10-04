@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import YouTubeVideo from "@/components/YouTubeVideo";
 
 const WebSocketComponent: React.FC = () => {
-  const [message, setMessage] = useState<string>("");
   const [socket, setSocket] = useState<WebSocket | null>(null);
 
   useEffect(() => {
@@ -14,7 +14,9 @@ const WebSocketComponent: React.FC = () => {
       console.log("Connected to WebSocket");
     };
 
-    ws.onmessage = (event: MessageEvent) => {};
+    ws.onmessage = (event: MessageEvent) => {
+      console.log(event.data);
+    };
 
     ws.onclose = () => {
       console.log("Disconnected from WebSocket");
@@ -26,22 +28,15 @@ const WebSocketComponent: React.FC = () => {
     return () => ws.close();
   }, []);
 
-  const sendMessage = () => {
+  const sendMessage = (time: number) => {
     if (socket) {
-      socket.send(message);
+      socket.send(time + "");
     }
   };
 
   return (
-    <div>
-      <input
-        type="text"
-        className="text-black"
-        onChange={(e) => {
-          setMessage(e.target.value);
-        }}
-      />
-      <button onClick={sendMessage}>Send</button>
+    <div className="flex justify-center items-center h-screen">
+      <YouTubeVideo sendMessage={sendMessage} />
     </div>
   );
 };
