@@ -8,7 +8,7 @@ interface YouTubeVideoProps {
   sendMessage: (time: number) => void;
 }
 
-const YouTubeVideo: React.FC<YouTubeVideoProps> = ({ sendMessage }: any) => {
+const YouTubeVideo: React.FC<YouTubeVideoProps> = ({ sendMessage }) => {
   const onPlayerReady = (event: YouTubeEvent) => {
     // Access the player object and call methods if needed
     event.target.pauseVideo();
