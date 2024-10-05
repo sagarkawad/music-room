@@ -1,47 +1,72 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import YouTubeVideo from "@/components/YouTubeVideo";
+import React, { useEffect, useState } from "react";
+import YouTube, { YouTubeEvent, YouTubeProps } from "react-youtube";
 
-const WebSocketComponent: React.FC = () => {
-  const [socket, setSocket] = useState<WebSocket | null>(null);
-  const [timeValue, setTimeValue] = useState("");
-
+const YouTubeFrame: React.FC = () => {
   useEffect(() => {
-    // Establish WebSocket connection
-    const ws = new WebSocket("http://localhost:8080");
+    // Create a new WebSocket connection to the server
+    const socket = new WebSocket("http://localhost:8080");
 
-    ws.onopen = () => {
-      console.log("Connected to WebSocket");
+    socket.onopen = () => {
+      console.log("WebSocket connection established");
+
+      // Now you can send data
+      const data = "true 2";
+      socket.send(data);
     };
 
-    ws.onmessage = (event: MessageEvent) => {
+    // When a message is received from the server
+    socket.onmessage = (event) => {
       console.log(event.data);
-      setTimeValue(event.data);
     };
-
-    ws.onclose = () => {
-      console.log("Disconnected from WebSocket");
-    };
-
-    setSocket(ws);
-
-    // Clean up the WebSocket connection on component unmount
-    return () => ws.close();
   }, []);
 
-  const sendMessage = (time: number) => {
-    if (socket) {
-      socket.send(time + "");
-    }
+  const YT_LOADING = -1;
+  const YT_BUFFERING = 3;
+  const YT_PLAYING = 1;
+  const YT_PAUSED = 2;
+
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [time, setTime] = useState(0);
+
+  // Event handler for when the video is ready
+  const onVideoReady: YouTubeProps["onReady"] = (event) => {
+    // access to player in all event handlers via event.target
+    event.target.pauseVideo(); // Example: Start the video in paused mode
+  };
+
+  const frameCheck = (e: YouTubeEvent) => {
+    setIsPlaying(e.target.getPlayerState() == YT_PLAYING);
+    setTime(e.target.getCurrentTime());
+  };
+
+  const checkState = () => {
+    console.log(time, isPlaying);
+  };
+
+  // Options for the YouTube player (optional)
+  const opts: YouTubeProps["opts"] = {
+    height: "390",
+    width: "640",
+    playerVars: {
+      // https://developers.google.com/youtube/player_parameters
+      autoplay: 1,
+    },
   };
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen">
-      <YouTubeVideo sendMessage={sendMessage} timeValue={timeValue} />
-      <h1 className="mt-4">{timeValue}</h1>
+    <div>
+      <h2>YouTube Video Frame</h2>
+      <YouTube
+        videoId="dQw4w9WgXcQ"
+        opts={opts}
+        onReady={onVideoReady}
+        onStateChange={frameCheck}
+      />
+      <button onClick={checkState}>check state</button>
     </div>
   );
 };
 
-export default WebSocketComponent;
+export default YouTubeFrame;
