@@ -91,7 +91,7 @@ const YouTubeFrame: React.FC = () => {
       <h2>YouTube Video Frame</h2>
 
       <YouTube
-        videoId="dQw4w9WgXcQ"
+        videoId="a9cyG_yfh1k"
         opts={opts}
         onReady={onVideoReady}
         onStateChange={frameCheck}
