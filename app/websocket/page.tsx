@@ -5,6 +5,10 @@ import YouTube, { YouTubeEvent, YouTubeProps } from "react-youtube";
 
 let socket: any = null;
 const yt = { current: null };
+const YT_LOADING = -1;
+const YT_BUFFERING = 3;
+const YT_PLAYING = 1;
+const YT_PAUSED = 2;
 
 // const YT = {
 //   current: {
@@ -14,12 +18,8 @@ const yt = { current: null };
 // };
 
 const YouTubeFrame: React.FC = () => {
-  const YT_LOADING = -1;
-  const YT_BUFFERING = 3;
-  const YT_PLAYING = 1;
-  const YT_PAUSED = 2;
-
   const [data, setData] = useState("");
+  const isSeekingRef = useRef(false);
   let dataVar;
 
   useEffect(() => {
@@ -74,6 +74,12 @@ const YouTubeFrame: React.FC = () => {
     if (parts[0] == "true") {
       //@ts-ignore
       yt.current.playVideo();
+
+      if (!isSeekingRef.current) {
+        isSeekingRef.current = true;
+        //@ts-ignore
+        yt.current.seekTo(Number(data[1]), true);
+      }
     } else if (parts[0] == "false") {
       //@ts-ignore
       yt.current.pauseVideo();
