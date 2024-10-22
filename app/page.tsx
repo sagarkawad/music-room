@@ -43,8 +43,15 @@ export default function Home() {
       />
       <button
         onClick={async () => {
-          await pushToDB(`/room/${roomName}?input=${video.split("=")[1]}`);
-          router.push(`/room/${roomName}?input=${video.split("=")[1]}`);
+          await pushToDB(
+            `/room/${roomName}?input=${video.split("=")[1].split("&")[0]}`
+          );
+          router.push(
+            `/room/${roomName}?input=${video.split("=")[1].split("&")[0]}`
+          );
+          console.log(
+            `/room/${roomName}?input=${video.split("=")[1].split("&")[0]}`
+          );
         }}
         className="border rounded px-4 bg-green-700"
       >

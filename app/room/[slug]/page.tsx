@@ -24,6 +24,7 @@ const page = ({ params }: { params: { slug: string } }) => {
   const [data, setData] = useState("");
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [link, setLink] = useState("");
   const isSeekingRef = useRef(false);
   let dataVar;
   const { slug: slug } = params;
@@ -50,19 +51,16 @@ const page = ({ params }: { params: { slug: string } }) => {
     };
 
     const queryDB = async () => {
-      const DBData = await axios.get("/api/link");
-      const allLinks: [{ link: string }] = DBData.data.links;
-      console.log(DBData.data.links);
-      const arr = [];
-      for (const el of allLinks) {
-        //@ts-ignore
-        console.log([el.link]);
-        arr.push(el.link);
+      try {
+        const DBData = await axios.post("/api/getlink", {
+          link: `/room/${slug}?input=${input}`,
+        });
+        console.log(DBData.data.existingLink.link);
+        setLink(DBData.data.existingLink.link);
+      } catch (e) {
+        console.log(e);
       }
-      //@ts-ignore
-      setRooms(arr);
       setLoading(false);
-      return allLinks;
     };
 
     queryDB();
@@ -77,13 +75,13 @@ const page = ({ params }: { params: { slug: string } }) => {
   };
 
   const frameCheck = (e: YouTubeEvent) => {
-    console.log(e.target.getVideoUrl().split("=")[1]);
+    console.log(e.target.getVideoUrl().split("v")[1].split("=")[1]);
     socket.send(
       `${
         e.target.getPlayerState() == YT_PLAYING ||
         e.target.getPlayerState() == YT_BUFFERING
       } ${e.target.getCurrentTime()} ${
-        e.target.getVideoUrl().split("=")[1]
+        e.target.getVideoUrl().split("v")[1].split("=")[1]
       } ${slug}`
     );
   };
@@ -123,7 +121,7 @@ const page = ({ params }: { params: { slug: string } }) => {
   if (loading) {
     return <h1>Loading...</h1>;
     //@ts-ignore
-  } else if (!rooms.includes(`/room/${slug}?input=${input}`)) {
+  } else if (link != `/room/${slug}?input=${input}`) {
     return <h1>no such room found!</h1>;
   }
   return (
