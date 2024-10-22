@@ -3,6 +3,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import YouTube, { YouTubeEvent, YouTubeProps } from "react-youtube";
 
+import { useSearchParams } from "next/navigation";
+
 let socket: any = null;
 const yt = { current: null };
 const YT_LOADING = -1;
@@ -17,10 +19,13 @@ const YT_PAUSED = 2;
 //   },
 // };
 
-const YouTubeFrame: React.FC = () => {
+const page = ({ params }: { params: { slug: string } }) => {
   const [data, setData] = useState("");
   const isSeekingRef = useRef(false);
   let dataVar;
+  const { slug: slug } = params;
+  const searchParams = useSearchParams();
+  const input = searchParams.get("input");
 
   useEffect(() => {
     // Create a new WebSocket connection to the server
@@ -88,10 +93,14 @@ const YouTubeFrame: React.FC = () => {
 
   return (
     <div>
+      <div>
+        <h1>This is the room - {slug}</h1>
+        <p>The video link is - {input}</p>
+      </div>
       <h2>YouTube Video Frame</h2>
 
       <YouTube
-        videoId="a9cyG_yfh1k"
+        videoId={input}
         opts={opts}
         onReady={onVideoReady}
         onStateChange={frameCheck}
@@ -102,4 +111,4 @@ const YouTubeFrame: React.FC = () => {
   );
 };
 
-export default YouTubeFrame;
+export default page;

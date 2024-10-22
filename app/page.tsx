@@ -2,10 +2,23 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function Home() {
   const [roomName, setRoomName] = useState("");
+  const [video, setVideo] = useState("");
   const router = useRouter();
+
+  const pushToDB = async (link: string) => {
+    try {
+      // Send POST request to the API route using Axios
+      const response = await axios.post("/api/link", {
+        link,
+      });
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <div className="flex flex-col p-4 items-center justify-center h-screen">
@@ -20,9 +33,18 @@ export default function Home() {
           setRoomName(e.target.value);
         }}
       />
+      <input
+        type="text"
+        placeholder="Youtube video link here..."
+        className="px-4 mb-4 text-black"
+        onChange={(e) => {
+          setVideo(e.target.value);
+        }}
+      />
       <button
-        onClick={() => {
-          router.push(`/room/${roomName}`);
+        onClick={async () => {
+          await pushToDB(`/room/${roomName}?input=${video.split("=")[1]}`);
+          router.push(`/room/${roomName}?input=${video.split("=")[1]}`);
         }}
         className="border rounded px-4 bg-green-700"
       >
