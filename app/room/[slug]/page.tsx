@@ -6,7 +6,8 @@ import axios from "axios";
 
 import { useSearchParams } from "next/navigation";
 
-let socket: any = null;
+//@ts-ignore
+let socket = null;
 const yt = {
   current: {
     playVideo: Function,
@@ -39,7 +40,7 @@ const page = ({ params }: { params: { slug: string } }) => {
 
   useEffect(() => {
     // Create a new WebSocket connection to the server
-    socket = new WebSocket("http://localhost:8080");
+    socket = new WebSocket("https://music-room-1-oejn.onrender.com/");
 
     socket.onopen = () => {
       console.log("WebSocket connection established");
