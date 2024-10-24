@@ -1,7 +1,7 @@
 // websocket-server.js
 const WS = require("ws");
 
-const wss = new WS.Server({ port: 10000 });
+const wss = new WS.Server({ port: process.env.PORT || 10000 });
 
 wss.on("connection", (ws: any) => {
   console.log("A new client connected");

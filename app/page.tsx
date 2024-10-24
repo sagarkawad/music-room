@@ -31,7 +31,7 @@ export default function Home() {
         `/room/${roomName}?input=${video.split("=")[1].split("&")[0]}`
       );
     } catch (error) {
-      // console.log("Error:", error.response.data.e.name);
+      console.log("Error:", error);
       setLoading(false);
       alert("try again with a different room name...");
     }
