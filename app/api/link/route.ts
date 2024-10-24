@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
-export async function POST(request: NextRequest, response: NextResponse) {
+export async function POST(request: NextRequest) {
   try {
     const prisma = new PrismaClient();
     const body = await request.json();
@@ -17,15 +17,5 @@ export async function POST(request: NextRequest, response: NextResponse) {
     return NextResponse.json({ message: "Link added successfully", newLink });
   } catch (e) {
     return NextResponse.json({ e }, { status: 500 });
-  }
-}
-
-export async function GET(request: NextRequest, response: NextResponse) {
-  try {
-    const prisma = new PrismaClient();
-    const links = await prisma.link.findMany();
-    return NextResponse.json({ links });
-  } catch (e) {
-    console.log(e);
   }
 }

@@ -4,6 +4,16 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
+// interface Err {
+//   response: {
+//     data: {
+//       e: {
+//         name: string;
+//       };
+//     };
+//   };
+// }
+
 export default function Home() {
   const [roomName, setRoomName] = useState("");
   const [video, setVideo] = useState("");
@@ -14,14 +24,14 @@ export default function Home() {
     try {
       setLoading(true);
       // Send POST request to the API route using Axios
-      const response = await axios.post("/api/link", {
+      await axios.post("/api/link", {
         link,
       });
       router.push(
         `/room/${roomName}?input=${video.split("=")[1].split("&")[0]}`
       );
-    } catch (error: any) {
-      console.log("Error:", error.response.data.e.name);
+    } catch (error) {
+      // console.log("Error:", error.response.data.e.name);
       setLoading(false);
       alert("try again with a different room name...");
     }
