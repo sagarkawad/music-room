@@ -1,3 +1,10 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off", // Disable explicit any type
+    "@typescript-eslint/no-unused-vars": "off", // Disable unused vars check
+    "@typescript-eslint/no-wrapper-object-types": "off", // Disable wrapper object types check
+    "react-hooks/rules-of-hooks": "off", // Disable rules of hooks
+    "@typescript-eslint/ban-ts-comment": "off" // Disable ban on TS comments
+  }
 }

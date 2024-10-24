@@ -6,8 +6,7 @@ import axios from "axios";
 
 import { useSearchParams } from "next/navigation";
 
-//@ts-ignore
-let socket = null;
+let socket: any = null;
 const yt = {
   current: {
     playVideo: Function,
