@@ -7,18 +7,29 @@ import axios from "axios";
 export default function Home() {
   const [roomName, setRoomName] = useState("");
   const [video, setVideo] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const pushToDB = async (link: string) => {
     try {
+      setLoading(true);
       // Send POST request to the API route using Axios
       const response = await axios.post("/api/link", {
         link,
       });
-    } catch (error) {
-      console.error("Error:", error);
+      router.push(
+        `/room/${roomName}?input=${video.split("=")[1].split("&")[0]}`
+      );
+    } catch (error: any) {
+      console.log("Error:", error.response.data.e.name);
+      setLoading(false);
+      alert("try again with a different room name...");
     }
   };
+
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
 
   return (
     <div className="flex flex-col p-4 items-center justify-center h-screen">
@@ -46,9 +57,7 @@ export default function Home() {
           await pushToDB(
             `/room/${roomName}?input=${video.split("=")[1].split("&")[0]}`
           );
-          router.push(
-            `/room/${roomName}?input=${video.split("=")[1].split("&")[0]}`
-          );
+
           console.log(
             `/room/${roomName}?input=${video.split("=")[1].split("&")[0]}`
           );

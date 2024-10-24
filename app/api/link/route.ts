@@ -16,7 +16,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
     console.log("it worked");
     return NextResponse.json({ message: "Link added successfully", newLink });
   } catch (e) {
-    console.log("error", e);
+    return NextResponse.json({ e }, { status: 500 });
   }
 }
 

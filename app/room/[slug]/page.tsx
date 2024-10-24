@@ -7,7 +7,13 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 
 let socket: any = null;
-const yt = { current: null };
+const yt = {
+  current: {
+    playVideo: Function,
+    pauseVideo: Function,
+    seekTo: (n: Number, f: Boolean) => {},
+  },
+};
 const YT_LOADING = -1;
 const YT_BUFFERING = 3;
 const YT_PLAYING = 1;
@@ -101,16 +107,14 @@ const page = ({ params }: { params: { slug: string } }) => {
     if (parts[2] == input) {
       if (parts[3] == slug) {
         if (parts[0] == "true") {
-          //@ts-ignore
           yt.current.playVideo();
 
           if (!isSeekingRef.current) {
             isSeekingRef.current = true;
-            //@ts-ignore
+
             yt.current.seekTo(Number(data[1]), true);
           }
         } else if (parts[0] == "false") {
-          //@ts-ignore
           yt.current.pauseVideo();
         }
       }
