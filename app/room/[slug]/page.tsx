@@ -42,7 +42,7 @@ const page = ({ params }: { params: { slug: string } }) => {
 
   useEffect(() => {
     // Create a new WebSocket connection to the server
-    socket = new WebSocket("https://music-room-1-oejn.onrender.com/");
+    socket = new WebSocket("ws://localhost:8080/yt-data");
 
     socket.onopen = () => {
       console.log("WebSocket connection established");
